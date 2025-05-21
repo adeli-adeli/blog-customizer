@@ -49,7 +49,6 @@ export const ArticleParamsForm = ({ setPageStyle }: ParamsProps) => {
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setPageStyle(forData);
-		console.log('отправка данных', forData);
 		setIsModalOpen(false);
 	};
 
@@ -58,8 +57,6 @@ export const ArticleParamsForm = ({ setPageStyle }: ParamsProps) => {
 		event.preventDefault();
 		setPageStyle(defaultArticleState);
 		setFormData(defaultArticleState);
-		console.log('сброс данных', defaultArticleState);
-
 		setIsModalOpen(false);
 	};
 
