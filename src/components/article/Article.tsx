@@ -5,10 +5,31 @@ import plane from 'src/images/plane.png';
 import { Text } from 'src/ui/text';
 
 import styles from './Article.module.scss';
+import { OptionType } from 'src/constants/articleProps';
+import { CSSProperties } from 'react';
 
-export const Article = () => {
+type ArticleProps = {
+	pageStyle: {
+		fontFamilyOption: OptionType;
+		fontColor: OptionType;
+		backgroundColor: OptionType;
+		contentWidth: OptionType;
+		fontSizeOption: OptionType;
+	};
+};
+export const Article = ({ pageStyle }: ArticleProps) => {
 	return (
-		<article className={clsx(styles.article)}>
+		<article
+			className={clsx(styles.article)}
+			style={
+				{
+					'--font-family': pageStyle.fontFamilyOption.value,
+					'--font-color': pageStyle.fontColor.value,
+					backgroundColor: pageStyle.backgroundColor.value,
+					width: pageStyle.contentWidth.value,
+					'--font-size': pageStyle.fontSizeOption.value,
+				} as CSSProperties
+			}>
 			<Text as='h1' size={45} weight={800} uppercase dynamicLite>
 				Портрет Западной Швейцарии
 			</Text>

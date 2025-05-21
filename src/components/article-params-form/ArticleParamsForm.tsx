@@ -17,52 +17,52 @@ import {
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 
-export const ArticleParamsForm = () => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const articleRef = useRef<HTMLDivElement>(null);
-	const [fontFamilyOption, setfontFamilyOption] = useState(
-		defaultArticleState.fontFamilyOption
-	);
-	const [fontColor, setFontColor] = useState(defaultArticleState.fontColor);
-	const [backgroundColor, setBackgroundColor] = useState(
-		defaultArticleState.backgroundColor
-	);
-	const [contentWidth, setContentWidth] = useState(
-		defaultArticleState.contentWidth
-	);
-	const [fontSizeOption, setFontSizeOption] = useState(
-		defaultArticleState.fontSizeOption
-	);
+type ParamsProps = {
+	setPageStyle: (params: typeof defaultArticleState) => void;
+};
 
+export const ArticleParamsForm = ({ setPageStyle }: ParamsProps) => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [forData, setFormData] = useState(defaultArticleState);
+	const articleRef = useRef<HTMLDivElement>(null);
+
+	// зарытие вне сайдбара
 	useOutsideClickClose({
 		isOpen: isModalOpen,
 		onChange: setIsModalOpen,
 		rootRef: articleRef,
 	});
 
-	// открытие/закрытие формы
+	// открытие/закрытие сайдбара
 	const handleClick = () => {
 		setIsModalOpen((isOpen) => !isOpen);
 	};
-	const handleFontChange = (newFont: OptionType) => {
-		setfontFamilyOption(newFont);
+
+	const handleChange = (
+		key: keyof typeof defaultArticleState,
+		value: OptionType
+	) => {
+		setFormData((prev) => ({ ...prev, [key]: value }));
 	};
 
-	const handleFontSizeChange = (newFontSize: OptionType) => {
-		setFontSizeOption(newFontSize);
+	// обработка сабмита
+	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setPageStyle(forData);
+		console.log('отправка данных', forData);
+		setIsModalOpen(false);
 	};
 
-	const handleFontColorChange = (newFontColor: OptionType) => {
-		setFontColor(newFontColor);
+	//обработка ресета
+	const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setPageStyle(defaultArticleState);
+		setFormData(defaultArticleState);
+		console.log('сброс данных', defaultArticleState);
+
+		setIsModalOpen(false);
 	};
 
-	const handleBackgroundColorChange = (newBackgroundColor: OptionType) => {
-		setBackgroundColor(newBackgroundColor);
-	};
-
-	const handleContentWidthChange = (newContentWidth: OptionType) => {
-		setContentWidth(newContentWidth);
-	};
 	return (
 		<>
 			<ArrowButton isOpen={isModalOpen} onClick={handleClick} />
@@ -72,49 +72,48 @@ export const ArticleParamsForm = () => {
 					styles.container,
 					isModalOpen && styles.container_open
 				)}>
-				<form className={styles.form}>
+				<form
+					className={styles.form}
+					onReset={handleReset}
+					onSubmit={handleSubmit}>
 					<h1 className={styles.title}>Задайте параметры</h1>
-					<div>
-						<Select
-							title='Шрифты'
-							options={fontFamilyOptions}
-							selected={fontFamilyOption}
-							onChange={handleFontChange}
-						/>
-					</div>
-					<div>
-						<RadioGroup
-							title='Размер шрифта'
-							name='radio'
-							options={fontSizeOptions}
-							selected={fontSizeOption}
-							onChange={handleFontSizeChange}
-						/>
-					</div>
-					<div>
-						<Select
-							title='Цвет шрифта'
-							options={fontColors}
-							selected={fontColor}
-							onChange={handleFontColorChange}
-						/>
-					</div>
-					<div>
-						<Select
-							title='Цвет фона'
-							options={backgroundColors}
-							selected={backgroundColor}
-							onChange={handleBackgroundColorChange}
-						/>
-					</div>
-					<div>
-						<Select
-							title='Ширина контента'
-							options={contentWidthArr}
-							selected={contentWidth}
-							onChange={handleContentWidthChange}
-						/>
-					</div>
+
+					<Select
+						title='Шрифты'
+						options={fontFamilyOptions}
+						selected={forData.fontFamilyOption}
+						onChange={(value) => handleChange('fontFamilyOption', value)}
+					/>
+
+					<RadioGroup
+						title='Размер шрифта'
+						name='radio'
+						options={fontSizeOptions}
+						selected={forData.fontSizeOption}
+						onChange={(value) => handleChange('fontSizeOption', value)}
+					/>
+
+					<Select
+						title='Цвет шрифта'
+						options={fontColors}
+						selected={forData.fontColor}
+						onChange={(value) => handleChange('fontColor', value)}
+					/>
+					<div className={styles.separator}></div>
+
+					<Select
+						title='Цвет фона'
+						options={backgroundColors}
+						selected={forData.backgroundColor}
+						onChange={(value) => handleChange('backgroundColor', value)}
+					/>
+
+					<Select
+						title='Ширина контента'
+						options={contentWidthArr}
+						selected={forData.contentWidth}
+						onChange={(value) => handleChange('contentWidth', value)}
+					/>
 
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' htmlType='reset' type='clear' />
