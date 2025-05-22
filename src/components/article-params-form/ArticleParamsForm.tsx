@@ -23,7 +23,7 @@ type ParamsProps = {
 
 export const ArticleParamsForm = ({ setPageStyle }: ParamsProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [forData, setFormData] = useState(defaultArticleState);
+	const [formData, setFormData] = useState(defaultArticleState);
 	const articleRef = useRef<HTMLDivElement>(null);
 
 	// зарытие вне сайдбара
@@ -48,7 +48,7 @@ export const ArticleParamsForm = ({ setPageStyle }: ParamsProps) => {
 	// обработка сабмита
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setPageStyle(forData);
+		setPageStyle(formData);
 		setIsModalOpen(false);
 	};
 
@@ -78,7 +78,7 @@ export const ArticleParamsForm = ({ setPageStyle }: ParamsProps) => {
 					<Select
 						title='Шрифты'
 						options={fontFamilyOptions}
-						selected={forData.fontFamilyOption}
+						selected={formData.fontFamilyOption}
 						onChange={(value) => handleChange('fontFamilyOption', value)}
 					/>
 
@@ -86,29 +86,30 @@ export const ArticleParamsForm = ({ setPageStyle }: ParamsProps) => {
 						title='Размер шрифта'
 						name='radio'
 						options={fontSizeOptions}
-						selected={forData.fontSizeOption}
+						selected={formData.fontSizeOption}
 						onChange={(value) => handleChange('fontSizeOption', value)}
 					/>
 
 					<Select
 						title='Цвет шрифта'
 						options={fontColors}
-						selected={forData.fontColor}
+						selected={formData.fontColor}
 						onChange={(value) => handleChange('fontColor', value)}
 					/>
+
 					<div className={styles.separator}></div>
 
 					<Select
 						title='Цвет фона'
 						options={backgroundColors}
-						selected={forData.backgroundColor}
+						selected={formData.backgroundColor}
 						onChange={(value) => handleChange('backgroundColor', value)}
 					/>
 
 					<Select
 						title='Ширина контента'
 						options={contentWidthArr}
-						selected={forData.contentWidth}
+						selected={formData.contentWidth}
 						onChange={(value) => handleChange('contentWidth', value)}
 					/>
 
